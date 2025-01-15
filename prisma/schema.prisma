@@ -1,0 +1,39 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  Int    @id @default(autoincrement())
+  user_name           String?
+  mobile              String?
+  email               String?   @unique
+  emailVerifiedAt     DateTime? @db.Timestamp(6)
+  userType            String?
+  ulbId               Int?
+  password            String
+  suspended           Boolean?  @default(false)
+  superUser           Boolean?
+  description         String?
+  rememberToken       String?   @db.VarChar(100)
+  createdAt           DateTime? @db.Timestamp(6)
+  updatedAt           DateTime? @db.Timestamp(6)
+  workflowParticipant Boolean?  @default(false)
+  photoRelativePath   String?
+  photo               String?
+  signRelativePath    String?
+  signature           String?
+  oldIds              BigInt?
+  name                String?
+  oldPassword         String?
+  userCode            String?   @db.VarChar(50)
+  alternateMobile     String?
+  address             String?
+  empId               String?
+
+  @@map("users")
+}
