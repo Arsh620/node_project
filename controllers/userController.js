@@ -55,10 +55,10 @@ const register = async (req, res) => {
             }
 
             const transaction = await prisma.$transaction(async (prismaTx) => {
-                upload(req, res, async (err) => {
-                    if (err) {
-                        return res.status(400).json({ message: err.message });
-                    }
+                // upload(req, res, async (err) => {
+                //     if (err) {
+                //         return res.status(400).json({ message: err.message });
+                //     }
                 // Hash the password
                 const hashedPassword = await bcrypt.hash(password, 10);
                 const userNames = name.split(" ");
@@ -83,31 +83,32 @@ const register = async (req, res) => {
                 }
 
                 return newUser;
-            });
+            // });
         });
+        console.log('transaction', transaction);
 
             // Handle file upload after user creation
-            let photoPath = null;
-            if (req.file) {
-                const uploadPath = path.join(__dirname, '../uploads/user_photos');
-                const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-                const ext = path.extname(req.file.originalname);
-                const fileName = `${req.file.fieldname}-${uniqueSuffix}${ext}`;
-                photoPath = `/uploads/user_photos/${fileName}`;
+            // let photoPath = null;
+            // if (req.file) {
+            //     const uploadPath = path.join(__dirname, '../uploads/user_photos');
+            //     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+            //     const ext = path.extname(req.file.originalname);
+            //     const fileName = `${req.file.fieldname}-${uniqueSuffix}${ext}`;
+            //     photoPath = `/uploads/user_photos/${fileName}`;
 
-                // Save file to the destination
-                const fileDestination = path.join(uploadPath, fileName);
-                fs.mkdirSync(uploadPath, { recursive: true });
-                fs.writeFileSync(fileDestination, req.file.buffer);
-            }
+            //     // Save file to the destination
+            //     const fileDestination = path.join(uploadPath, fileName);
+            //     fs.mkdirSync(uploadPath, { recursive: true });
+            //     fs.writeFileSync(fileDestination, req.file.buffer);
+            // }
 
-            // Update user record with photo path
-            if (photoPath) {
-                await prisma.user.update({
-                    where: { id: transaction.id },
-                    data: { photo: photoPath },
-                });
-            }
+            // // Update user record with photo path
+            // if (photoPath) {
+            //     await prisma.user.update({
+            //         where: { id: transaction.id },
+            //         data: { photo: photoPath },
+            //     });
+            // }
 
             // Success response
             return res.status(201).json({
