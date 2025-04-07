@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id                  Int    @id @default(autoincrement())
+  id                  Int       @id @default(autoincrement())
   user_name           String?
   mobile              String?
   email               String?   @unique
@@ -37,3 +37,19 @@ model User {
 
   @@map("users")
 }
+model HomePageContents {  // Renamed to plural
+  id            Int      @id @default(autoincrement())
+  title         String   @db.VarChar(255)
+  description   String?  
+  image         String?  @db.VarChar(512)
+  image_path    String   @db.VarChar(100)
+  is_active     Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  createdBy     String?  @db.VarChar(100)
+  updatedBy     String?  @db.VarChar(100)
+
+  @@map("home_page_contents")  // Ensures the table is named correctly
+}
+
+
